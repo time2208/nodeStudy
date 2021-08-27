@@ -105,3 +105,67 @@ class Person extends React.Componect{
    }
 }
 ```
+
+* 자식전달
+``` javascript
+class Person extends React.Componect{
+   state = {
+      person:[
+        {name: "1번", age: 1},
+        {name: "2번", age: 2},
+        {name: "3번", age: 3},
+      ]
+   }
+   render(){
+      return (
+         <div>
+            <Person name={this.state.person[0].name} age={this.state.person[0].age}
+               안녕하세요
+            </Person>
+         </div>
+      )
+   }
+}
+
+// >
+const Person = (props) => (
+     <div>
+        <h1>이름: {props.name} 나이는: {props.age}</h1>
+        <h2>{props.children}</h2>
+     </div>
+)
+//class >
+class Person extends React.Component {
+   render() {
+      const {name, age} = this.props;
+      return (
+        <div>
+           <h1>이름: {props.name} 나이는: {props.age}</h1>
+           {this.props.children}
+        </div>
+      )
+   }
+}
+
+```
+
+* 함수전달
+```javascript
+render() {
+   const {person} = this.state;
+   return(
+      <div className="App">
+         <Person
+           name={person[0].name}
+           age={person[0].age}
+           myfun={() => console.log("test")}
+      </div>
+   )
+}
+//Peerson.js
+const Person = (pers) =>(
+     <h1>이름: {props.name} 나이는: {props.age}</h1>
+     <h2>{props.children}</h2>
+     {props.myfun()}
+)
+```
