@@ -162,6 +162,19 @@ render() {
       </div>
    )
 }
+//다른형태
+render() {
+   const {person} = this.state;
+   const myfun = () => {console.log("test")};
+   return(
+      <div className="App">
+         <Person
+           name={person[0].name}
+           age={person[0].age}
+           myfun={myfun}
+      </div>
+   )
+}
 //Peerson.js
 const Person = (pers) =>(
      <h1>이름: {props.name} 나이는: {props.age}</h1>
