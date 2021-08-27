@@ -16,7 +16,7 @@
 import React from 'react';
   const Person = (props) => (
      <div>
-        <h1>이름: {props.name} 나이는: {</h1>
+        <h1>이름: {props.name} 나이는: {props.age}</h1>
      </div>
 )
 ```
