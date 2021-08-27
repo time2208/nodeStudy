@@ -21,7 +21,7 @@ import React from 'react';
 )
 
 //아래의 형태로 사용 가능
-  const Person = (name, age) => (
+  const Person = ({name, age}) => (
      <div>
         <h1>이름: {name} 나이는: {age}</h1>
      </div>
