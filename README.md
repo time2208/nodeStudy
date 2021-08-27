@@ -62,7 +62,7 @@ export default Person;
 * state
   * 해당 컴포넌트에서 저장될 자료를 의미한다.
   * class 만이 state를 가질수 있다.
-  * 렌더부 변경되어야 하는 경우 state는 갱신을 위한 함구를 별도로 준비해야 한다.
+  * 렌더부 변경되어야 하는 경우 state는 갱신을 위한 함수를 별도로 준비해야 한다.
 ```javascript
 class Person extends React.Componect{
    state = {
