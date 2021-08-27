@@ -26,6 +26,8 @@ import React from 'react';
         <h1>이름: {name} 나이는: {age}</h1>
      </div>
 )
+
+export default Person;
 ```
 * 파라미터 (class)
 ```javascript
@@ -50,6 +52,54 @@ class Person extends React.Componect{
          const {name, age} = this.props;
          <div>
             <h1>이름: {name} 나이는: {age}</h1>
+         </div>
+      )
+   }
+}
+export default Person;
+```
+
+* state
+  * 해당 컴포넌트에서 저장될 자료를 의미한다.
+  * class 만이 state를 가질수 있다.
+```javascript
+class Person extends React.Componect{
+   state = {
+      person:[
+        {name: "1번", age: 1},
+        {name: "2번", age: 2},
+        {name: "3번", age: 3},
+      ]
+   }
+   render(){
+      return (
+         <div>
+            <Person name={this.state.person[0}.name} age={this.state.person[0}.age}</Person>
+            <Person name={this.state.person[1}.name} age={this.state.person[1}.age}</Person>
+            <Person name={this.state.person[2}.name} age={this.state.person[2}.age}</Person>
+         </div>
+      )
+   }
+}
+
+//다른 형태
+class Person extends React.Componect{
+   constructor(props){
+      super(props);
+      this.state = {
+         person:[
+           {name: "1번", age: 1},
+           {name: "2번", age: 2},
+           {name: "3번", age: 3},
+         ]
+      }
+   }
+   render(){
+      return (
+         <div>
+            <Person name={this.state.person[0}.name} age={this.state.person[0}.age}</Person>
+            <Person name={this.state.person[1}.name} age={this.state.person[1}.age}</Person>
+            <Person name={this.state.person[2}.name} age={this.state.person[2}.age}</Person>
          </div>
       )
    }
