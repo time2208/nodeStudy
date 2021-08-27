@@ -19,6 +19,13 @@ import React from 'react';
         <h1>이름: {props.name} 나이는: {props.age}</h1>
      </div>
 )
+
+//아래의 형태로 사용 가능
+  const Person = (name, age) => (
+     <div>
+        <h1>이름: {name} 나이는: {age}</h1>
+     </div>
+)
 ```
 * 파라미터 (class)
 ```javascript
@@ -31,6 +38,18 @@ class Person extends React.Componect{
       return (
          <div>
             <h1>이름: {this.props.name} 나이는: {this.props.age}</h1>
+         </div>
+      )
+   }
+}
+
+//ES6
+class Person extends React.Componect{
+   render(){
+      return (
+         const {name, age} = this.props;
+         <div>
+            <h1>이름: {name} 나이는: {age}</h1>
          </div>
       )
    }
