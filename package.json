@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/time2208/nodeStudy/issues"
   },
-  "homepage": "https://github.com/time2208/nodeStudy#readme"
+  "homepage": "https://github.com/time2208/nodeStudy#readme",
+  "dependencies": {
+    "jshint": "^2.13.1"
+  }
 }
