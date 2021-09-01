@@ -33,6 +33,6 @@
     * 노드에 기보능로 들어 있는 http모둘을 사용하여 웹서버 객체를 만듭니다.
     * creatServer() 메소드로 웹 서버 개체를 마들고 listen() 메소드로 대기
     * listen(port, [hostname], [backlog], [callback])
-        *서버를 실행시키고 대기시킵니다.
+        * 서버를 실행시키고 대기시킵니다.
     * close([callback])
-        *서버를 종료합니다.
+        * 서버를 종료합니다.
