@@ -36,3 +36,13 @@
         * 서버를 실행시키고 대기시킵니다.
     * close([callback])
         * 서버를 종료합니다.
+    * connection
+        * 클라이언트가 접속하여 연결이 만들어질 때 발생하는 이벤트입니다.
+    * request
+        * 클라이언트가 요청할때 발생하는 이벤트입니다.
+    * writeHead(statusCode, [statusMessage], [headers])
+        * 응답으로 보낼 헤더를 만듭니다.
+    * write(chunk, [encoding], [callback])
+        * 응답 본문(body) 데이터를 만듭니다. 여러번 호출될 수 있습니다.
+    * end([date], [encoding], [callback])
+        * 클라이언트로 응갑을 전송합니다.
