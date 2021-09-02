@@ -1,6 +1,6 @@
 # nodejs
 * nodeJs 학습을 위한 공간입니다.
-* easyspub(https://www.youtube.com/channel/UCkgDFniWXiEGY4SZm0NHf2w)의 "2017 Do it! Node.js 프로그래밍 [개정판]"을 참고하고 있습니다.
+* easyspub(https://www.youtube.com/channel/UCkgDFniWXiEGY4SZm0NHf2w)의 "2017 Do it! Node.js 프로그래밍 [개정판]"을 참고하고 있습니다.)
 
 =================
 
@@ -68,3 +68,6 @@
         * 클라이언트에서 POST 방식으로 전송한 파아미터를 확인합니다. (단 body-parser와 같은 외장 모듈을 사용해야 합니다.)
     * header(name)
         * 헤더를 확인합니다.
+* 미들웨어
+    * static
+        * 특정 폴더의 파일들을 특정 패스로 접근할 수 있도록 열어주는 역할을 함
