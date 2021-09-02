@@ -84,3 +84,21 @@
         * DELETE 방식으로 특정 패스 요청이 발생했을 때 사용할 콜백 함수를 지정합니다.
     * all(callback)
         * 모든 요청 방식을 처리하며, 특정 패스 요청이 발생했을 때 사용할 콜백 함수를 지정합니다.
+* 에러 페이지 처리
+```javaScript
+app.all('*', function(req, res){
+    res.status(404).send('<h1>요청 페이지가 없습니다.</h1>');
+});
+
+//또는 
+var expressErrorHandler = require('express-error-handler');
+
+var errorHandler = expressErrorHandler({
+    static: {
+        '404':'./public/404.html'
+    }
+});
+
+app.use(expressErrorHandler.httpError(404));
+app.use(errorHandler);
+```

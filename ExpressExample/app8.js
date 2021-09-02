@@ -30,6 +30,10 @@ router.route('/process/login').post(function(req, res){
     res.end();
 });
 
+app.all('*', function(req, res){
+    res.status(404).send('<h1>요청 페이지가 없습니다.</h1>');
+});
+
 app.use('/', router);
 
 var server = http.createServer(app).listen(app.get('port'), function () {
