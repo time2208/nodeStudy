@@ -19,9 +19,9 @@ app.use(function (req, res, next) {
     console.log('첫번째 미들웨어 호출됨.');
 
     var userAgent = req.header('User-Agent');
-    var paramName = req.body.name || req.query.name;
+    var paramId = req.body.id || req.query.id;
 
-    res.send('<h3>서버에서 응답, userAgent: ' + userAgent + ' </h3><h3>서버에서 응답, paramName: ' + paramName +' </h3>');
+    res.send('<h3>서버에서 응답, userAgent: ' + userAgent + ' </h3><h3>서버에서 응답, paramId: ' + paramId +' </h3>');
 });
 
 var server = http.createServer(app).listen(app.get('port'), function () {
