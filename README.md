@@ -112,3 +112,10 @@ app.use(errorHandler);
         * 컬렉션 참조하기
     * find()
         * 문서찾기
+* mongoose 모듀
+    * connect(uri(s), [options], [callback])
+        * mongoose를 사용해 데이터베이스에 연결한다. 연결 후에는 mongoose.connection 객체를 사용해 연결 관련 아벤트를 처리할 수 있습니다.
+    * Schema()
+        * 스키마를 정의하는 생성자입니다.
+    * model(name, [schema], [collection], [skiplnit])
+        * 모델을 정의합니다. [collection]이 지정되면 이 컬렉션을 사용하며, 지정하지 않으면 name으로 유추한 컬렉션을 사용합니다.

@@ -12,23 +12,43 @@ var expressSession = require('express-session');
 var expressErrorHandler = require('express-error-handler');
 
 //mongodb 모듈 사용
-var MongoClient = require('mongodb').MongoClient;
+//var MongoClient = require('mongodb').MongoClient;
+
+//mongoose 모듈 사용
+var mongoose = require('mongoose');
 
 var database;
+var UserSchema;
+var UserModel;
 
 function connectDB(){
     var databaseUrl = 'mongodb://localhost:27017/local';
 
-    MongoClient.connect(databaseUrl, function(err, db){
-        if(err){
-            console.log('데이터 베이스 연결시 에러 발생하');
-            return;
-        }
+    mongoose.Promise = global.Promise;
+    mongoose.connect(databaseUrl);
+    database = mongoose.connection;
 
-        console.log('데이터베이스에 연결됨: ' + databaseUrl);
-        //mongodb 버전 3.0이상을 사용할 때는, connection을 할 때에 database명을 명시해야합니다. 
-        database = db.db('local');
+    database.on('open', function(){
+        console.log('데이터베이스에 연결됨 : ' + databaseUrl);
+
+        UserSchema = mongoose.Schema({
+            id: String,
+            name: String,
+            password: String
+        });
+
+        console.log('UserSchema 정의함. ');
+
+        UserModel = mongoose.model('users', UserSchema);
+        console.log('UserModel 정의함.');
+
     });
+
+    database.on('disconnected', function(){
+        console.log('데이터베이스 연결 끊어짐.');
+    });
+
+    database.on('error', console.error.bind(console, 'mongoose 연결 에러.'));
 }
 
 var app = express();
