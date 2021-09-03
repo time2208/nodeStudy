@@ -232,45 +232,37 @@ app.use('/', router);
 var authUser = function(db, id, password, callback){
     console.log('authUser 호출됨.' + id + ',' + password );
 
-    //users를 참조
-    var users = db.collection('users');
-
-    users.find({"id": id, "password":password}).toArray(function(err, docs){
-        if(err){
+    UserModel.find({ "id": id, "password": password }, function (err, docs){
+        if (err) {
             callback(err, null);
             return;
         }
 
-        if (docs.length > 0){
+        if (docs.length > 0) {
             console.log('일치하는 사용자를 찾음');
             callback(null, docs);
-        }else {
+        } else {
             console.log('일치하는 사용자를 찾지 못함');
             callback(null, null);
         }
+
     });
 };
 
 //사용자 추가 함수
 var addUser = function(db, id, password, name, callback){
     console.log('addUser 호출됨.' + id + ',' + password + ', ' + name);
-    
-    var users = db.collection('users');
 
-    users.insertMany([{ "id": id, "password": password, "name": name}], function(err, result){
-        if(err){
+    var user = new UserModel({ "id": id, "password": password, "name": name});
+
+    user.save(function(err) {
+        if(err) {
             callback(err, null);
             return;
         }
 
-        if(result.insertedCount > 0){
-            console.log('사용자 추가된: ' + result.insertedCount);
-            callback(null, result);
-        }else {
-            console.log('추가된 레코드가 없음.');
-            callback(null, null);
-        }
-
+        console.log ('사용자 데이터 추가함');
+        callback(null, user);
     });
 };
 
