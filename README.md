@@ -105,3 +105,10 @@ app.use(errorHandler);
 * multer (파일 업로드용 미들웨어)
     * 파일 업로드 시 POST 방식으로 요청해야 하며 body-parser 미들웨어 사용 필요합니다.
     * fs, cors 모듈도 사용
+* mongodb 모듈
+    * connect()
+        * 연결하기
+    * collection()
+        * 컬렉션 참조하기
+    * find()
+        * 문서찾기
