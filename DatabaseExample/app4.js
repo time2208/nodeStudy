@@ -315,22 +315,6 @@ var authUser = function(db, id, password, callback){
 
 
     });
-
-    UserModel.find({ "id": id, "password": password }, function (err, docs){
-        if (err) {
-            callback(err, null);
-            return;
-        }
-
-        if (docs.length > 0) {
-            console.log('일치하는 사용자를 찾음');
-            callback(null, docs);
-        } else {
-            console.log('일치하는 사용자를 찾지 못함');
-            callback(null, null);
-        }
-
-    });
 };
 
 //사용자 추가 함수
