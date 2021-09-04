@@ -112,10 +112,32 @@ app.use(errorHandler);
         * 컬렉션 참조하기
     * find()
         * 문서찾기
-* mongoose 모듀
+* mongoose 모듈
     * connect(uri(s), [options], [callback])
         * mongoose를 사용해 데이터베이스에 연결한다. 연결 후에는 mongoose.connection 객체를 사용해 연결 관련 아벤트를 처리할 수 있습니다.
     * Schema()
         * 스키마를 정의하는 생성자입니다.
     * model(name, [schema], [collection], [skiplnit])
         * 모델을 정의합니다. [collection]이 지정되면 이 컬렉션을 사용하며, 지정하지 않으면 name으로 유추한 컬렉션을 사용합니다.
+* 데이터베이스의 이벤트는 open, error, disconnected 등 있다.
+* Schema() 메소드를 이용해 스키마 정의
+```javaScript
+var UserSchema = new mongoose.Schema({
+    id:{type: String, required: true, unique: true},
+    password: {type: String, required: true},
+    name: String,
+    age: Number,
+    create_at: Date
+});
+```
+    * type
+        * 자료형을 지정합니다.
+    * required
+        * 값이 true이면 반드시 들어가야 하는 속성이 됩니다.
+    * unique
+        * 값이 true이면 이 속성에 고유한 값이 들어가야 합니다.
+    * 스키마를 만들때 인덱스를 추가할 수 있으며 스키마 객체에 메소드 추가 가능
+    * static(name, fn)
+        * 모델 객체에서 사용할 수 있는 함수를 등록합니다. 함수의 이름과 함수 객체를 파라미터로 전달합니다.
+    * method(name, fn)
+        * 모델 인스턴스 객체에서 사용할 수 있는 함구를 등록합니다. 함수의 이름과 함수 객체를 파라미터로 전달합니다.
