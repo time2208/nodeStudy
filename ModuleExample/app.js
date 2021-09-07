@@ -11,6 +11,9 @@ var expressSession = require('express-session');
 //에러 핸들러 모듈 사용
 var expressErrorHandler = require('express-error-handler');
 
+//user 모듈 불러오기
+var user = require('./routes/user');
+
 //암호화 모듈
 var crypto = require('crypto');
 
@@ -20,6 +23,23 @@ var mongoose = require('mongoose');
 var database;
 var UserSchema;
 var UserModel;
+
+var app = express();
+
+app.set('port', process.env.PORT || 3000);
+
+app.use('/public', static(path.join(__dirname, 'public')));
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.use(cookieParser());
+app.use(expressSession({
+    secret: 'my key',
+    resave: true,
+    saveUninitialized: true
+}));
+
 
 function connectDB() {
     var databaseUrl = 'mongodb://localhost:27017/local';
@@ -40,283 +60,29 @@ function connectDB() {
     });
 
     database.on('error', console.error.bind(console, 'mongoose 연결 에러.'));
+
+    app.set('database', database);
 }
 
-function createUserSchema(database){
+function createUserSchema(database) {
     database.UserSchema = require('./database/user_schena').createSchema(mongoose);
 
     database.UserModel = mongoose.model('users2', database.UserSchema);
     console.log('UserModel 정의함.');
 }
 
-var app = express();
-
-app.set('port', process.env.PORT || 3000);
-
-app.use('/public', static(path.join(__dirname, 'public')));
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-app.use(cookieParser());
-app.use(expressSession({
-    secret: 'my key',
-    resave: true,
-    saveUninitialized: true
-}));
-
-
 
 var router = express.Router();
 
-router.route('/process/product').get(function (req, res) {
-    console.log('/process/product 라우팅 함수에서 받음.');
+router.route('/process/login').post(user.login);
 
-    if (req.session.user) {
-        res.redirect('/public/product.html');
-    } else {
-        res.redirect('/public/login2.html');
-    }
-});
+router.route('/process/adduser').post(user.addUser);
 
-router.route('/process/login').post(function (req, res) {
-    console.log('/process/login 라우팅 함수에서 받음.');
-
-    var paramId = req.body.id;
-    var paramPassword = req.body.password;
-
-    console.log('요청 파라미터: ' + paramId + ', ' + paramPassword);
-
-    if (req.session.user) {
-        console.log('이미 로그인됨');
-        res.redirect('/public/product.html');
-    } else {
-        req.session.user = {
-            id: paramId,
-            name: '찬',
-            authorized: true
-        };
-        res.writeHead(200, { "Content-Type": "text/html;charset=utf8" });
-        res.write('<h1>로그인 성공</h1>');
-        res.write('<p>id: ' + paramId + '</p>');
-        res.write('<br><br><a href="/public/product.html">상품 페이지로 이동</a>');
-        res.end();
-    }
-});
-
-router.route('/process/logout').get(function (req, res) {
-    console.log('/process/logout 라우팅 함수에서 받음.');
-
-    if (req.session.user) {
-        console.log('로그아웃 합니다.');
-        req.session.destroy(function (err) {
-            if (err) {
-                console.log('세션 삭제 시 에러 발생');
-                return;
-            }
-
-            console.log('세션 삭제 성공');
-            res.redirect('/public/login2.html');
-        });
-    } else {
-        console.log('로그인 되어 있지 않습니다.');
-        res.redirect('/public/login2.html');
-    }
-});
-
-router.route('/process/setUserCookie').get(function (req, res) {
-    console.log('/process/setUserCookie 라우팅 함수에서 받음.');
-
-    res.cookie('user', {
-        id: 'chan',
-        name: '찬',
-        authorized: true
-    });
-
-    res.redirect('/process/showCookie');
-});
-
-router.route('/process/showCookie').get(function (req, res) {
-    console.log('/process/showCookie 라우팅 함수에서 받음.');
-
-    res.send(req.cookies);
-});
-
-router.route('/process/login').post(function (req, res) {
-    console.log('/process/login 라우팅 함수 호출됨.');
-
-    var paramId = req.body.id;
-    var paramPassword = req.body.password;
-
-    console.log('요청 파라미터: ' + paramId + ', ' + paramPassword);
-
-
-    if (database) {
-        authorized(database, paramId, paramPassword, function (err, docs) {
-            if (err) {
-                console.log('에러 발생.');
-                res.writeHead(200, { "Content-Type": "text/html;charset=utf8" });
-                res.write('<h1>에러 발생</h1>');
-                res.end();
-                return;
-            }
-
-            if (docs) {
-                console.dir(docs);
-                res.writeHead(400, { "Content-Type": "text/html;charset=utf8" });
-                res.write('<h1>사용자 로그인 성공</h1>');
-                res.write('<dir><p>사용자: ' + docs[0].name + '</p></dir>');
-                res.write('<br><br><a href="/public/login.html" >다시 로그인</a>');
-                res.end();
-            } else {
-                console.log('에러 발생.');
-                res.writeHead(200, { "Content-Type": "text/html;charset=utf8" });
-                res.write('<h1>사용자 데이터 조회 안됨.</h1>');
-                res.end();
-            }
-        });
-    } else {
-        console.log('에러 발생.');
-        res.writeHead(200, { "Content-Type": "text/html;charset=utf8" });
-        res.write('<h1>데이터 연결 안됨.</h1>');
-        res.end();
-    }
-});
-
-router.route('/process/adduser').post(function (req, res) {
-    console.log('/process/adduser 라우팅 함수 호출됨.');
-
-    var paramId = req.body.id;
-    var paramPassword = req.body.password;
-    var paramName = req.body.name;
-
-    console.log('요청 파라미터: ' + paramId + ', ' + paramPassword + ', ' + paramName);
-
-    if (database) {
-        addUser(database, paramId, paramPassword, paramName, function (err, result) {
-            if (err) {
-                console.log('에러 발생.');
-                res.writeHead(200, { "Content-Type": "text/html;charset=utf8" });
-                res.write('<h1>에러 발생</h1>');
-                res.end();
-                return;
-            }
-
-            if (result) {
-                console.dir(result);
-
-                res.writeHead(400, { "Content-Type": "text/html;charset=utf8" });
-                res.write('<h1>사용자 추가 성공</h1>');
-                res.write('<dir><p>사용자: ' + paramName + '</p></dir>');
-                res.end();
-            } else {
-                console.log('에러 발생.');
-                res.writeHead(200, { "Content-Type": "text/html;charset=utf8" });
-                res.write('<h1>사용자 추가 안됨.</h1>');
-                res.end();
-            }
-        });
-    } else {
-        console.log('에러 발생.');
-        res.writeHead(200, { "Content-Type": "text/html;charset=utf8" });
-        res.write('<h1>데이터 연결 안됨.</h1>');
-        res.end();
-    }
-});
-
-router.route('/process/listuser').post(function (req, res) {
-    console.log('/process/listuser 라우팅 함수 호출됨.');
-
-    if (database) {
-        UserModel.findAll(function (err, results) {
-            if (err) {
-                console.log('에러 발생.');
-                res.writeHead(200, { "Content-Type": "text/html;charset=utf8" });
-                res.write('<h1>에러 발생</h1>');
-                res.end();
-                return;
-            }
-
-            if (results) {
-                console.dir(results);
-                res.writeHead(200, { "Content-Type": "text/html;charset=utf8" });
-                res.write('<h3>사용자 리스트</h3>');
-                res.write('<dir><ul>');
-
-                for (var i = 0; i < results.length; i++) {
-                    var curId = results[i]._doc.id;
-                    var curName = results[i]._doc.name;
-
-                    res.write('<li>#' + i + '->' + curId + ', ' + curName + '</li>');
-                }
-                res.write('</ul></dir>');
-                res.end();
-            } else {
-                console.log('에러 발생.');
-                res.writeHead(200, { "Content-Type": "text/html;charset=utf8" });
-                res.write('<h1>조회된 사용자 없음</h1>');
-                res.end();
-            }
-        });
-    } else {
-        console.log('에러 발생.');
-        res.writeHead(200, { "Content-Type": "text/html;charset=utf8" });
-        res.write('<h1>데이터 연결 안됨.</h1>');
-        res.end();
-    }
-
-});
-
+router.route('/process/listuser').post(user.listUser);
 
 app.use('/', router);
 
-var authUser = function (db, id, password, callback) {
-    console.log('authUser 호출됨.' + id + ',' + password);
 
-    UserSchema.findById(id, function (err, results) {
-        if (err) {
-            callback(err, null);
-            return;
-        }
-
-        console.log('아이디 %s로 검색됨.');
-        if (results.length > 0) {
-
-            var user = new UserModel({ id: id });
-            var authenticated = user.authenticate(password, results[0]._doc.salt, results[0]._doc.hashed_password);
-
-            if (authenticated) {
-                console.log('비밀전호 일치함.');
-                callback(null, results);
-            } else {
-                console.log('비밀번호 일치하지 않음.');
-                callback(null, null);
-            }
-        } else {
-            console.log('비밀번호 일치하지 사용자 없음.');
-            callback(null, null);
-        }
-
-
-    });
-};
-
-//사용자 추가 함수
-var addUser = function (db, id, password, name, callback) {
-    console.log('addUser 호출됨.' + id + ',' + password + ', ' + name);
-
-    var user = new UserModel({ "id": id, "password": password, "name": name });
-
-    user.save(function (err) {
-        if (err) {
-            callback(err, null);
-            return;
-        }
-
-        console.log('사용자 데이터 추가함');
-        callback(null, user);
-    });
-};
 
 //404에러 페이지 처리
 var errorHandler = expressErrorHandler({
