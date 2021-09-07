@@ -241,7 +241,7 @@ var authUser = function(id, password, callback){
             console.log('실행된 SQL : '+ exec.sql);
 
             if(err){
-                callback(err, null)
+                callback(err, null);
                 return;
             }
 
