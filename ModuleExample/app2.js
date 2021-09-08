@@ -17,16 +17,10 @@ var user = require('./routes/user');
 var config = require('./config');
 
 var database_loader = require('./database/database_loader');
+var route_loader = require('./routes/route_loader');
 
 //암호화 모듈
 var crypto = require('crypto');
-
-//mongoose 모듈 사용
-var mongoose = require('mongoose');
-
-var database;
-var UserSchema;
-var UserModel;
 
 var app = express();
 
@@ -45,17 +39,8 @@ app.use(expressSession({
     saveUninitialized: true
 }));
 
-var router = express.Router();
 
-router.route('/process/login').post(user.login);
-
-router.route('/process/adduser').post(user.addUser);
-
-router.route('/process/listuser').post(user.listUser);
-
-app.use('/', router);
-
-
+route_loader.init(app, express.Router());
 
 //404에러 페이지 처리
 var errorHandler = expressErrorHandler({
