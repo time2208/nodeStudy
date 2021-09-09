@@ -43,10 +43,6 @@ Schema.createSchema = function(mongoose) {
         }
     });
 
-    UserSchema.method('makeSalt', function () {
-        return Math.round((new Date().valueOf() * Math.random())) + '';
-    });
-
     UserSchema.static('findById', function (id, callback) {
         return this.find({ id: id }, callback);
     });

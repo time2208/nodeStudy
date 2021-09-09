@@ -149,7 +149,7 @@ var listuser = function (req, res) {
 var authuser = function (db, id, password, callback) {
     console.log('authUser 호출됨.' + id + ',' + password);
 
-    db.UserSchema.findById(id, function (err, results) {
+    db.UserModel.findById(id, function (err, results) {
         if (err) {
             callback(err, null);
             return;
@@ -158,7 +158,7 @@ var authuser = function (db, id, password, callback) {
         console.log('아이디 %s로 검색됨.');
         if (results.length > 0) {
 
-            var user = new UserModel({ id: id });
+            var user = new db.UserModel({ id: id });
             var authenticated = user.authenticate(password, results[0]._doc.salt, results[0]._doc.hashed_password);
 
             if (authenticated) {
