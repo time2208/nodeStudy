@@ -25,7 +25,8 @@ var crypto = require('crypto');
 var app = express();
 
 app.set('views', __dirname+'/views');
-app.set('view engine', 'ejs');
+//app.set('view engine', 'ejs');
+app.set('view engine', 'pug');
 
 console.log('config.server_port -> ' + config.servrt_port);
 app.set('port', config.servrt_port || 3000);
