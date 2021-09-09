@@ -26,7 +26,7 @@ function initRoutes(app, router){
             console.log('라우팅 함수의 타입을 알 수 없습니다. : ' + curItem.type);
         }
     }
-
+    
     app.use('/', router);
 }
 

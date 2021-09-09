@@ -178,7 +178,7 @@ var authuser = function (db, id, password, callback) {
 };
 
 //사용자 추가 함수
-var adduser = function (db, id, password, name, callback) {
+var addUser = function (db, id, password, name, callback) {
     console.log('addUser 호출됨.' + id + ',' + password + ', ' + name);
 
     var user = new db.UserModel({ "id": id, "password": password, "name": name });

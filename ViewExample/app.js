@@ -45,6 +45,7 @@ app.use(expressSession({
 
 route_loader.init(app, express.Router());
 
+
 //404에러 페이지 처리
 var errorHandler = expressErrorHandler({
     static: {
@@ -57,6 +58,6 @@ app.use(errorHandler);
 
 var server = http.createServer(app).listen(app.get('port'), function () {
     console.log('익스프레스로 웹 서버를 실행함 :' + app.get('port'));
-
+    
     database_loader.init(app, config);
 });
