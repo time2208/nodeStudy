@@ -118,18 +118,25 @@ var listuser = function (req, res) {
 
             if (results) {
                 console.dir(results);
-                res.writeHead(200, { "Content-Type": "text/html;charset=utf8" });
-                res.write('<h3>사용자 리스트</h3>');
-                res.write('<dir><ul>');
 
-                for (var i = 0; i < results.length; i++) {
-                    var curId = results[i]._doc.id;
-                    var curName = results[i]._doc.name;
+                var context = {
+                    results: results
+                };
+                req.app.render('listuser', context, function (err, html) {
+                    if (err) {
+                        console.log('뷰 렌더링 중 에러 발생 : ' + err.stack);
 
-                    res.write('<li>#' + i + '->' + curId + ', ' + curName + '</li>');
-                }
-                res.write('</ul></dir>');
-                res.end();
+                        console.log('에러 발생.');
+                        res.writeHead(200, { "Content-Type": "text/html;charset=utf8" });
+                        res.write('<h1>뷰 렌더링 중 에러 발생</h1>');
+                        res.write('<br><p>' + err.stack + '</p>');
+                        res.end();
+                        return;
+                    }
+                    res.writeHead(200, { "Content-Type": "text/html;charset=utf8" });
+                    res.end(html);
+                });
+                
             } else {
                 console.log('에러 발생.');
                 res.writeHead(200, { "Content-Type": "text/html;charset=utf8" });
