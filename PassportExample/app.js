@@ -29,8 +29,8 @@ var flash = require('connect-flash');
 var app = express();
 
 app.set('views', __dirname+'/views');
-//app.set('view engine', 'ejs');
-app.set('view engine', 'pug');
+app.set('view engine', 'ejs');
+//app.set('view engine', 'pug');
 
 console.log('config.server_port -> ' + config.servrt_port);
 app.set('port', config.servrt_port || 3000);
@@ -137,8 +137,39 @@ passport.deserializeUser(function (user, done){
     done(null, user);
 });
 
+var router = express.Router();
+route_loader.init(app, router);
 
-route_loader.init(app, express.Router());
+//===== 회원가입과 로그인 라우팅 함수 =====
+router.route('/').get(function(req, res){
+    console.log('/ 패스로 요청됨.'); 
+
+    res.render('index.ejs');
+});
+
+router.route('/login').get(function(req, res){
+    console.log('/login 패스로 get 요청됨. ');
+
+    res.render('login.ejs', {message: req.flash('loginMessage')});
+});
+
+router.route('/login').post(passport.authenticate('local-login', {
+    successRedirect: '/profile',
+    failureRedirect: '/login',
+    failureFlash: true
+}));
+
+router.route('/signup').get(function (req, res) {
+    console.log('/signup 패스로 get 요청됨. ');
+
+    res.render('signup.ejs', { message: req.flash() });
+});
+
+router.route('/signup').post(passport.authenticate('local-signup', {
+    successRedirect: '/profile',
+    failureRedirect: '/signup',
+    failureFlash: true
+}));
 
 
 //404에러 페이지 처리
