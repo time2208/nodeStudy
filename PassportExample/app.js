@@ -171,6 +171,32 @@ router.route('/signup').post(passport.authenticate('local-signup', {
     failureFlash: true
 }));
 
+router.route('/profile').get(function(req, res){
+    console.log('/profile 패스로 get 요청됨. ');
+
+    console.log('req.user 객체 정보');
+    console.log(req.user);
+
+    if(!req.user){
+        console.log('사용자 인증 안된 상태임.');
+        res.redirect('/');
+    }else {
+        console.log('사용자 인증된 상태임.');
+
+        if(Array.isArray(req.user)){
+            res.render('profile.ejs', {user: req.user[0]._doc});
+        }else {
+            res.render('profile.ejs', { user: req.user });
+        }
+    }
+});
+
+router.route('/logout').get(function(req, res){
+    console.log('/logout 패스로 get 요청됨. ');
+
+    req.logout();
+    res.redirect('/');
+});
 
 //404에러 페이지 처리
 var errorHandler = expressErrorHandler({
