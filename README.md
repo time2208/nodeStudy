@@ -148,3 +148,10 @@ var UserSchema = new mongoose.Schema({
     * 최대한 간단한 형태로 입력하므로 공백과 들여쓰기 기준으로 태그의 구조가 결정됨.
     * 들여쓰기르 잘모사면 문제 발생
     * 모듈 설치하고 뷰 엔진 설정 필요
+
+* socket.io
+    * listen() 메소드를 이용한 대기
+        * attach(httpServer, options)
+            * 웹 서버 인스턴스가 socket.io를 처리합니다.
+        * listen(httpServer, options)
+            * 위의 attach() 메소드와 같은 기능입니다.
