@@ -61,7 +61,7 @@ app.use(passport.session());
 app.use(flash());
 
 var configPassport = require('./config/passport');
-configPassport(app, passport());
+configPassport(app, passport);
 
 
 var router = express.Router();
@@ -93,3 +93,10 @@ var server = http.createServer(app).listen(app.get('port'), function () {
 //===== socket.io 서버 시작 =====
 var io = socketio.listen(server);
 console.log('socket.io 요청을 받아들일 준비가 되었습니다.');
+
+io.sockets.on('connecttion', function(socket){
+    console.log('connection info -> ' + socket.request.connection._peername);
+
+    socket.remoteAddress = socket.request.connection._peername.address;
+    socket.remotePort = socket.request.connection._peername.port;
+});
